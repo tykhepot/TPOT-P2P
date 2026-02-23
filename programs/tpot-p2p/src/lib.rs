@@ -1,7 +1,8 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Transfer, Token, TokenAccount, Mint};
 
-// 模块导入
+// 模块导入  
+pub mod accounts;
 pub mod order;
 pub mod escrow;
 pub mod dispute;
@@ -9,6 +10,7 @@ pub mod reputation;
 pub mod utils;
 
 // 重新导出
+pub use accounts::*;
 pub use order::*;
 pub use escrow::*;
 pub use dispute::*;
@@ -16,12 +18,12 @@ pub use reputation::*;
 pub use utils::*;
 
 // 常量定义
-pub const PLATFORM_FEE: u64 = 50;           // 0.5% 平台手续费
-pub const DISPUTE_FEE: u64 = 100;           // 1% 争议手续费
-pub const ESCROW_TIMEOUT: i64 = 3600;       // 1小时托管超时
-pub const PAYMENT_TIMEOUT: i64 = 1800;      // 30分钟付款超时
-pub const MIN_REPUTATION: u32 = 0;          // 最低信誉分
-pub const MAX_ORDER_AMOUNT: u64 = 1_000_000_000_000; // 最大订单金额
+pub const PLATFORM_FEE: u64 = 50;
+pub const DISPUTE_FEE: u64 = 100;
+pub const ESCROW_TIMEOUT: i64 = 3600;
+pub const PAYMENT_TIMEOUT: i64 = 1800;
+pub const MIN_REPUTATION: u32 = 0;
+pub const MAX_ORDER_AMOUNT: u64 = 1_000_000_000_000;
 
 declare_id!("TPOTP2P11111111111111111111111111111111111");
 
