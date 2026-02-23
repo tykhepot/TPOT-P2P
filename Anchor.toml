@@ -3,13 +3,13 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-tpot_p2p = "TPOTP2P11111111111111111111111111111111111"
+tpot_p2p = "6YYc6JKwDftka6eWAALmAwNoprnz8ZCh3AZFbSdn4LVu"
 
 [programs.devnet]
-tpot_p2p = "TPOTP2P11111111111111111111111111111111111"
+tpot_p2p = "6YYc6JKwDftka6eWAALmAwNoprnz8ZCh3AZFbSdn4LVu"
 
 [programs.mainnet]
-tpot_p2p = "TPOTP2P11111111111111111111111111111111111"
+tpot_p2p = "6YYc6JKwDftka6eWAALmAwNoprnz8ZCh3AZFbSdn4LVu"
 
 [registry]
 url = "https://api.apr.dev"
