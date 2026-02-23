@@ -1,0 +1,35 @@
+{
+  "name": "tpot-p2p",
+  "version": "0.1.0",
+  "description": "TykhePot P2P Token Trading Platform",
+  "license": "MIT",
+  "scripts": {
+    "build": "anchor build",
+    "test": "anchor test",
+    "deploy": "anchor deploy",
+    "deploy:devnet": "anchor deploy --provider.cluster devnet",
+    "deploy:mainnet": "anchor deploy --provider.cluster mainnet",
+    "clean": "rm -rf target node_modules",
+    "lint": "eslint app/src",
+    "dev:app": "cd app && npm run dev",
+    "dev:server": "cd server && npm run dev"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.30.0",
+    "@solana/web3.js": "^1.87.0",
+    "@solana/spl-token": "^0.3.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0",
+    "ts-mocha": "^10.0.0",
+    "mocha": "^10.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tykhepot/tpot-p2p.git"
+  }
+}
