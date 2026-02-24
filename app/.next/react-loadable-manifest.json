@@ -1,0 +1,24 @@
+{
+  "../node_modules/@solana/wallet-adapter-solflare/lib/esm/adapter.js -> @solflare-wallet/sdk": {
+    "id": 119,
+    "files": [
+      "static/chunks/119.a11bb25258411204.js"
+    ]
+  },
+  "../node_modules/@solana/wallet-adapter-solflare/lib/esm/metamask/wallet.js -> @solflare-wallet/metamask-sdk": {
+    "id": 9525,
+    "files": [
+      "static/chunks/525.b78fd91413a31b0c.js"
+    ]
+  },
+  "pages/_app.tsx -> @/components/WalletProvider": {
+    "id": 6334,
+    "files": [
+      "static/css/34a72a2dfc6ca7d9.css",
+      "static/chunks/8015bd09-61e2fbed9bfbd743.js",
+      "static/chunks/865-4723186164328f50.js",
+      "static/chunks/510.b174197939b9481c.js",
+      "static/chunks/713.47a687eab662db8f.js"
+    ]
+  }
+}
