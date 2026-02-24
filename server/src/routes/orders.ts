@@ -1,110 +1,80 @@
 import { Router } from 'express';
-import { db } from '../config/database';
+import { db } from '../db';
 
 const router = Router();
 
-// 获取订单列表
+// 获取所有开放订单
 router.get('/', async (req, res) => {
   try {
-    const { type, status, page = 1, limit = 20 } = req.query;
-    const offset = (Number(page) - 1) * Number(limit);
-
-    let query = 'SELECT * FROM orders WHERE 1=1';
-    const params: any[] = [];
-
-    if (type) {
-      params.push(type);
-      query += ` AND order_type = $${params.length}`;
-    }
-
-    if (status) {
-      params.push(status);
-      query += ` AND status = $${params.length}`;
-    }
-
-    query += ' ORDER BY created_at DESC';
-    query += ` LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
-    params.push(limit, offset);
-
-    const result = await db.query(query, params);
-
-    res.json({
-      success: true,
-      data: result.rows,
-      pagination: {
-        page: Number(page),
-        limit: Number(limit),
-        total: result.rowCount,
-      },
-    });
+    const { chain } = req.query;
+    const orders = await db.getOpenOrders(chain as string);
+    res.json(orders);
   } catch (error) {
-    res.status(500).json({ success: false, error: (error as Error).message });
+    res.status(500).json({ error: 'Failed to fetch orders' });
+  }
+});
+
+// 获取单个订单
+router.get('/:id', async (req, res) => {
+  try {
+    const order = await db.getOrder(req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch order' });
   }
 });
 
 // 创建订单
 router.post('/', async (req, res) => {
   try {
-    const {
-      order_id,
-      maker,
-      order_type,
-      token_mint,
-      amount,
-      price,
-      payment_method,
-    } = req.body;
-
-    const result = await db.query(
-      `INSERT INTO orders (order_id, maker, order_type, token_mint, amount, price, payment_method, expires_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, NOW() + INTERVAL '24 hours')
-       RETURNING *`,
-      [order_id, maker, order_type, token_mint, amount, price, payment_method]
-    );
-
-    res.json({ success: true, data: result.rows[0] });
+    const order = await db.createOrder(req.body);
+    res.json(order);
   } catch (error) {
-    res.status(500).json({ success: false, error: (error as Error).message });
+    res.status(500).json({ error: 'Failed to create order' });
   }
 });
 
-// 获取订单详情
-router.get('/:orderId', async (req, res) => {
+// 更新订单
+router.patch('/:id', async (req, res) => {
   try {
-    const { orderId } = req.params;
-    const result = await db.query(
-      'SELECT * FROM orders WHERE order_id = $1',
-      [orderId]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ success: false, error: 'Order not found' });
-    }
-
-    res.json({ success: true, data: result.rows[0] });
+    const order = await db.updateOrder(req.params.id, req.body);
+    res.json(order);
   } catch (error) {
-    res.status(500).json({ success: false, error: (error as Error).message });
+    res.status(500).json({ error: 'Failed to update order' });
   }
 });
 
-// 更新订单状态
-router.put('/:orderId/status', async (req, res) => {
+// 获取用户订单
+router.get('/user/:publicKey', async (req, res) => {
   try {
-    const { orderId } = req.params;
-    const { status } = req.body;
-
-    const result = await db.query(
-      'UPDATE orders SET status = $1, updated_at = NOW() WHERE order_id = $2 RETURNING *',
-      [status, orderId]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ success: false, error: 'Order not found' });
-    }
-
-    res.json({ success: true, data: result.rows[0] });
+    const orders = await db.getOrdersByUser(req.params.publicKey);
+    res.json(orders);
   } catch (error) {
-    res.status(500).json({ success: false, error: (error as Error).message });
+    res.status(500).json({ error: 'Failed to fetch user orders' });
+  }
+});
+
+// 获取订单消息
+router.get('/:id/messages', async (req, res) => {
+  try {
+    const messages = await db.getMessages(req.params.id);
+    res.json(messages);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch messages' });
+  }
+});
+
+// 发送消息
+router.post('/:id/messages', async (req, res) => {
+  try {
+    const { sender, content, type } = req.body;
+    const message = await db.addMessage(req.params.id, sender, content, type);
+    res.json(message);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to send message' });
   }
 });
 

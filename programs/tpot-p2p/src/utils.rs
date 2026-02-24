@@ -1,74 +1,77 @@
 use anchor_lang::prelude::*;
 
-// ============ 错误码定义 ============
+use crate::{OrderType, Ruling};
 
 #[error_code]
 pub enum P2PError {
     #[msg("Invalid amount")]
     InvalidAmount,
-    
+
     #[msg("Invalid price")]
     InvalidPrice,
-    
+
     #[msg("Invalid limit values")]
     InvalidLimit,
-    
+
     #[msg("Payment method too long")]
     PaymentMethodTooLong,
-    
+
     #[msg("Platform is paused")]
     PlatformPaused,
-    
+
     #[msg("Order not pending")]
     OrderNotPending,
-    
+
     #[msg("Order already taken")]
     OrderAlreadyTaken,
-    
+
     #[msg("Order expired")]
     OrderExpired,
-    
+
     #[msg("Order not matched")]
     OrderNotMatched,
-    
+
     #[msg("Order not paid")]
     OrderNotPaid,
-    
+
     #[msg("Order cannot be cancelled")]
     OrderCannotCancel,
-    
+
     #[msg("Not authorized")]
     NotAuthorized,
-    
+
     #[msg("Not buyer")]
     NotBuyer,
-    
+
     #[msg("Not seller")]
     NotSeller,
-    
+
     #[msg("Not arbitrator")]
     NotArbitrator,
-    
+
     #[msg("Not participant")]
     NotParticipant,
-    
+
     #[msg("Dispute not open")]
     DisputeNotOpen,
-    
+
     #[msg("Insufficient balance")]
     InsufficientBalance,
-    
+
     #[msg("Insufficient reputation")]
     InsufficientReputation,
-    
+
     #[msg("User banned")]
     UserBanned,
-    
+
     #[msg("Order not found")]
     OrderNotFound,
-    
+
     #[msg("Escrow not found")]
     EscrowNotFound,
+
+    #[msg("Invalid order type")]
+    InvalidOrderType,
 }
 
 // ============ 事件定义 ============
@@ -168,9 +171,7 @@ pub fn calculate_fee(amount: u64, fee_rate: u64) -> u64 {
 /// 验证支付方式
 pub fn validate_payment_method(method: &str) -> bool {
     let valid_methods = [
-        "SOL", "USDT", "USDC", 
-        "ALIPAY", "WECHAT", "BANK",
-        "PAYPAL", "REVOLUT"
+        "SOL", "USDT", "USDC", "ALIPAY", "WECHAT", "BANK", "PAYPAL", "REVOLUT",
     ];
     valid_methods.contains(&method.to_uppercase().as_str())
 }

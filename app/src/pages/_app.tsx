@@ -1,8 +1,8 @@
 import type { AppProps } from 'next/app'
 import '../styles/globals.css'
 import dynamic from 'next/dynamic'
+import { LanguageProvider } from '@/i18n/LanguageContext'
 
-// 动态导入 WalletProvider，禁用 SSR
 const WalletProvider = dynamic(
   () => import('@/components/WalletProvider').then((mod) => mod.WalletProvider),
   { ssr: false }
@@ -11,7 +11,9 @@ const WalletProvider = dynamic(
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <WalletProvider>
-      <Component {...pageProps} />
+      <LanguageProvider>
+        <Component {...pageProps} />
+      </LanguageProvider>
     </WalletProvider>
   )
 }
